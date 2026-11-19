@@ -1,0 +1,11 @@
+# Changelog
+
+Todas as mudanças relevantes do site ficam registradas aqui, da mais recente para a mais antiga.
+As versões seguem versionamento semântico. Enquanto o site não estiver no domínio oficial, elas começam em `0`.
+
+## [0.1.0] - 2026-11-19
+
+- Abertura que mostra um site genérico de template e o varre para revelar o da MACH, com alça para arrastar e comparar os dois.
+- Demonstrações interativas: página que se rearranja com a largura, disco com mola e comparação de peso do site.
+- Seções de processo em quatro passos, chamada para o direct e dúvidas comuns.
+- Botão flutuante para o direct.
