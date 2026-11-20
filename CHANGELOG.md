@@ -3,6 +3,11 @@
 Todas as mudanças relevantes do site ficam registradas aqui, da mais recente para a mais antiga.
 As versões seguem versionamento semântico. Enquanto o site não estiver no domínio oficial, elas começam em `0`.
 
+## [0.3.0] - 2026-11-19
+
+- "Como funciona" virou uma cena 3D presa à tela: o símbolo da MACH nasce em traços, ganha volume e fica sólido conforme os quatro passos.
+- Topo da abertura escurecido para o logo e o link ficarem legíveis sobre as partículas.
+
 ## [0.2.0] - 2026-11-19
 
 - Abertura refeita como cena em WebGL presa à tela: partículas formam uma parede de sites iguais e, com a rolagem, viram o logo da MACH.
