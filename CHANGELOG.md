@@ -3,6 +3,11 @@
 Todas as mudanças relevantes do site ficam registradas aqui, da mais recente para a mais antiga.
 As versões seguem versionamento semântico. Enquanto o site não estiver no domínio oficial, elas começam em `0`.
 
+## [0.4.0] - 2026-11-19
+
+- Depois dos créditos, um jatinho escreve MACH com o rastro de fumaça. Tocar na palavra repete a cena.
+- O botão flutuante some no rodapé para não cobrir a animação.
+
 ## [0.3.0] - 2026-11-19
 
 - "Como funciona" virou uma cena 3D presa à tela: o símbolo da MACH nasce em traços, ganha volume e fica sólido conforme os quatro passos.

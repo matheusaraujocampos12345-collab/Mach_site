@@ -191,8 +191,17 @@ summary::after{content:"";flex:none;width:14px;height:14px;border-right:1.5px so
 details[open] summary::after{transform:rotate(-135deg) translate(-3px,-3px)}
 details p{padding:0 0 24px;color:var(--soft);max-width:54ch}
 
-footer{padding:44px var(--pad) 120px;border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:20px 40px;justify-content:space-between;align-items:flex-end;color:var(--soft);font-size:15px;font-weight:400}
+footer{padding:44px var(--pad) clamp(56px,9vw,110px);border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:20px 40px;justify-content:space-between;align-items:flex-end;color:var(--soft);font-size:15px;font-weight:400}
 footer img{width:170px;height:auto;margin-bottom:14px}
+
+/* Depois dos créditos: um jatinho escreve MACH no céu */
+.sky{display:block;flex-basis:100%;width:100%;max-width:1040px;margin:clamp(36px,8vw,96px) auto 0;padding:0;background:none;border:0;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sky svg{display:block;width:100%;height:auto;overflow:visible}
+.sky path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sky .tr{stroke:var(--ink);stroke-width:7}
+.sky .soft{stroke:var(--ink);stroke-width:22;opacity:.13}
+.sky .hot{stroke:var(--main)}
+.sky .jet{fill:var(--ink);stroke:none;opacity:0}
 
 .float{position:fixed;z-index:20;right:16px;bottom:16px;padding-bottom:env(safe-area-inset-bottom,0px);opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s ease, transform .4s cubic-bezier(.16,1,.3,1)}
 .float.show{opacity:1;transform:none;pointer-events:auto}
@@ -319,6 +328,9 @@ footer img{width:170px;height:auto;margin-bottom:14px}
     Sites sob medida, com animação de verdade.
   </div>
   <div><a class="link" href="https://www.instagram.com/mach.sites/" target="_blank" rel="noopener">@mach.sites</a><br>© 2026 MACH Estúdio</div>
+  <button class="sky" id="ceu" type="button" aria-label="MACH escrito no céu por um jatinho. Toque para ver de novo.">
+    <svg viewBox="-20 20 1040 290" aria-hidden="true"></svg>
+  </button>
 </footer>
 
 <div class="float" id="flutua"><a class="btn" href="https://ig.me/m/mach.sites" target="_blank" rel="noopener">Chamar no direct</a></div>
@@ -707,13 +719,76 @@ footer img{width:170px;height:auto;margin-bottom:14px}
     cv.addEventListener('webglcontextlost', function (e) { e.preventDefault(); seen = false; flat(); });
   })();
 
+  /* ================= Depois dos créditos: o jatinho que escreve MACH ================= */
+  (function () {
+    var sky = document.getElementById('ceu'), svg = sky.querySelector('svg'), NS = 'http://www.w3.org/2000/svg';
+    /* O voo inteiro, trecho a trecho: 0 = voando sem fumaça, 1 = fumaça branca, 2 = fumaça laranja (o "A") */
+    var ROUTE = [
+      ['M-110 255 Q-20 305 60 240', 0],
+      ['M60 240 L60 60 L145 172 L230 60 L230 240', 1],
+      ['M230 240 Q260 284 290 240', 0],
+      ['M290 240 L375 60 L460 240', 2],
+      ['M460 240 C520 330 770 150 690 60', 0],
+      ['M690 60 L566 60 Q520 60 520 106 L520 194 Q520 240 566 240 L690 240', 1],
+      ['M690 240 C745 300 700 15 750 60', 0],
+      ['M750 60 L750 240', 1],
+      ['M750 240 Q698 200 750 150', 0],
+      ['M750 150 L920 150', 1],
+      ['M920 150 Q978 108 920 60', 0],
+      ['M920 60 L920 240', 1],
+      ['M920 240 Q965 312 1130 185', 0]
+    ];
+    var legs = [], total = 0;
+    function path(d, cls) { var p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); if (cls) p.setAttribute('class', cls); svg.appendChild(p); return p; }
+    ROUTE.forEach(function (r) {
+      var soft = r[1] ? path(r[0], 'soft' + (r[1] === 2 ? ' hot' : '')) : null;
+      var line = path(r[0], r[1] ? 'tr' + (r[1] === 2 ? ' hot' : '') : '');
+      var len = line.getTotalLength();
+      if (r[1]) [soft, line].forEach(function (p) { p.style.strokeDasharray = len; p.style.strokeDashoffset = len; });
+      legs.push({ line: line, soft: soft, len: len, at: total, smoke: !!r[1] }); total += len;
+    });
+    var jet = path('M17 0 L4 -2.4 L-3 -12 L-7.5 -12 L-3.6 -2.4 L-10 -2.2 L-13 -6.5 L-16 -6.5 L-14.4 0 L-16 6.5 L-13 6.5 L-10 2.2 L-3.6 2.4 L-7.5 12 L-3 12 L4 2.4 Z', 'jet');
+    var t0 = 0, playing = false, done = false, heading = 0;
+    function draw(dist) {
+      for (var i = 0; i < legs.length; i++) {
+        var g = legs[i]; if (!g.smoke) continue;
+        var off = g.len - clamp(dist - g.at, 0, g.len);
+        g.line.style.strokeDashoffset = off; g.soft.style.strokeDashoffset = off;
+      }
+    }
+    function fly(now) {
+      if (!playing) return;
+      var u = clamp((now - t0) / 6200, 0, 1), dist = u * total, i = 0;
+      while (i < legs.length - 1 && dist > legs[i].at + legs[i].len) i++;
+      var g = legs[i], d = clamp(dist - g.at, 0, g.len);
+      var a = g.line.getPointAtLength(Math.max(0, d - 2)), b = g.line.getPointAtLength(Math.min(g.len, d + 2));
+      var want = Math.atan2(b.y - a.y, b.x - a.x), turn = Math.atan2(Math.sin(want - heading), Math.cos(want - heading));
+      heading += turn * .3;
+      var p = g.line.getPointAtLength(d);
+      jet.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') rotate(' + (heading * 57.2958).toFixed(1) + ') scale(1.5)');
+      jet.style.opacity = 1;
+      draw(dist);
+      if (u < 1) requestAnimationFrame(fly);
+      else { playing = false; done = true; jet.style.opacity = 0; }
+    }
+    function play() { if (playing) return; draw(0); heading = .5; playing = true; done = false; t0 = performance.now(); requestAnimationFrame(fly); }
+    if (calm || !('IntersectionObserver' in window)) { draw(total); return; }
+    new IntersectionObserver(function (en) {
+      if (en[0].isIntersecting) { if (!done) play(); }
+      else if (!playing) { done = false; draw(0); }
+    }, { threshold: .55 }).observe(sky);
+    sky.addEventListener('click', function () { if (!playing) play(); });
+  })();
+
   /* ================= O botão flutuante aparece depois da abertura e some na chamada final ================= */
   var float = document.getElementById('flutua');
   if ('IntersectionObserver' in window) {
     var past = false, atCall = false;
     var sync = function () { float.classList.toggle('show', past && !atCall); };
     new IntersectionObserver(function (en) { past = !en[0].isIntersecting; sync(); }).observe(hero);
+    var atEnd = false; sync = function () { float.classList.toggle('show', past && !atCall && !atEnd); };
     new IntersectionObserver(function (en) { atCall = en[0].isIntersecting; sync(); }, { threshold: .3 }).observe(document.getElementById('contato'));
+    new IntersectionObserver(function (en) { atEnd = en[0].isIntersecting; sync(); }).observe(document.querySelector('footer'));
   }
 })();
 </script>
