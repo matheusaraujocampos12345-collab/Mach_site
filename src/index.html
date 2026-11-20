@@ -70,6 +70,7 @@ h2{font-size:clamp(36px,6.4vw,84px);font-weight:200;line-height:1.02;letter-spac
 .stage.live{pointer-events:auto}
 .big{font-size:clamp(42px,10vw,124px);font-weight:200;line-height:.98;letter-spacing:-.04em;max-width:11ch}
 @media (min-width:860px){.big{max-width:15ch;font-size:clamp(60px,min(8.6vw,14.5vh),124px)}.big.final{max-width:21ch;font-size:clamp(46px,min(6.2vw,10.2vh),92px)}}
+@media (max-width:859px){.big.final{max-width:none;font-size:clamp(30px,9.2vw,44px);line-height:1.02}}
 .stage .sub{max-width:36ch;margin-top:clamp(16px,2.6vh,26px);color:var(--soft);font-size:clamp(17px,1.5vw,21px)}
 .stage .cta{margin-top:clamp(20px,3.4vh,34px)}
 .roll{display:flex;align-items:center;gap:12px;margin-top:clamp(18px,3vh,30px);color:var(--soft);font-size:15px;font-weight:400}
@@ -438,7 +439,12 @@ footer img{width:170px;height:auto;margin-bottom:14px}
     var pw = W / (cols - .15), ph = pw * 1.5;
     var rows = Math.ceil(VIEW_H / ph) + 1, pages = cols * rows;
     var tall = aspect < 1;
-    var lw = tall ? W * .86 : Math.min(W * .5, 6.2), ls = lw / logoPts.w, ly = VIEW_H * (tall ? .15 : .23), np = logoPts.pts.length / 5;
+    /* O logo ocupa só o espaço livre entre a barra do topo e o texto final, sem encostar em nenhum dos dois. */
+    var pinH = Math.max(1, canvas.clientHeight), unit = VIEW_H / pinH;
+    var freeTop = barLogo.parentNode.offsetHeight + 8, freeBot = Math.max(freeTop + 40, stages[2].offsetTop - 26);
+    var lw = tall ? W * .86 : Math.min(W * .5, 6.2), room = (freeBot - freeTop) * unit;
+    if (lw * logoPts.h / logoPts.w > room) lw = room * logoPts.w / logoPts.h;
+    var ls = lw / logoPts.w, ly = (.5 - (freeTop + freeBot) / 2 / pinH) * VIEW_H, np = logoPts.pts.length / 5;
     for (var i = 0; i < N; i++) {
       var o = i * 13, pg = i % pages, col = pg % cols, row = (pg / cols) | 0;
       var cx = (col - (cols - 1) / 2) * pw, cy = ((rows - 1) / 2 - row) * ph;
@@ -466,6 +472,8 @@ footer img{width:170px;height:auto;margin-bottom:14px}
     }
     gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
   }
+  var lastW = 0, lastH = 0;
+  function rebuild() { lastW = canvas.clientWidth; lastH = canvas.clientHeight; fit(); build(); readScroll(); }
   function fit() {
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
@@ -515,7 +523,9 @@ footer img{width:170px;height:auto;margin-bottom:14px}
         var img = new Image();
         img.onload = function () {
           try {
-            logoPts = sampleLogo(img); fit(); build(); ready = true; readScroll(); cur = want; wake();
+            logoPts = sampleLogo(img); rebuild(); ready = true; cur = want; wake();
+            /* Quando a fonte termina de carregar o texto muda de altura: o logo é reposicionado. */
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (ready) rebuild(); });
           } catch (err) { goPlain(); }
         };
         img.onerror = goPlain;
@@ -528,7 +538,7 @@ footer img{width:170px;height:auto;margin-bottom:14px}
         var again;
         window.addEventListener('resize', function () {
           clearTimeout(again);
-          again = setTimeout(function () { if (ready) { fit(); build(); readScroll(); } }, 180);
+          again = setTimeout(function () { if (ready && (canvas.clientWidth !== lastW || canvas.clientHeight !== lastH)) rebuild(); }, 180);
         });
         if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { seen = en[0].isIntersecting; wake(); }).observe(hero);
         canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); goPlain(); });

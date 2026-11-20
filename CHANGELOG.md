@@ -3,6 +3,12 @@
 Todas as mudanças relevantes do site ficam registradas aqui, da mais recente para a mais antiga.
 As versões seguem versionamento semântico. Enquanto o site não estiver no domínio oficial, elas começam em `0`.
 
+## [0.4.1] - 2026-11-20
+
+- Corrigido: no celular, o logo de partículas cobria o título final da abertura. Agora ele se ajusta ao espaço livre acima do texto, em qualquer altura de tela.
+- Título final menor no celular, para caber junto com o logo.
+- A cena não é mais refeita quando as barras do navegador aparecem e somem durante a rolagem.
+
 ## [0.4.0] - 2026-11-19
 
 - Depois dos créditos, um jatinho escreve MACH com o rastro de fumaça. Tocar na palavra repete a cena.
