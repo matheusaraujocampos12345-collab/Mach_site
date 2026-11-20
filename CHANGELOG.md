@@ -3,6 +3,13 @@
 Todas as mudanças relevantes do site ficam registradas aqui, da mais recente para a mais antiga.
 As versões seguem versionamento semântico. Enquanto o site não estiver no domínio oficial, elas começam em `0`.
 
+## [0.5.0] - 2026-11-20
+
+- Abertura nova: MACH em letras 3D metálicas sobre um espelho d'água, com anel de luz em volta do A, estrelas ao fundo e câmera guiada pela rolagem. Saiu a cena de partículas.
+- O título, o texto e o botão aparecem logo na primeira tela, sem precisar rolar.
+- "Como funciona" virou rolagem lateral: quatro cartões que deslizam para o lado, com setas, e o símbolo 3D acompanha o cartão ativo.
+- Dobras suavizadas: sem linhas entre as seções, blocos que entram macios, feixes de luz com bordas dissolvidas e uma luz de fundo contínua.
+
 ## [0.4.1] - 2026-11-20
 
 - Corrigido: no celular, o logo de partículas cobria o título final da abertura. Agora ele se ajusta ao espaço livre acima do texto, em qualquer altura de tela.
