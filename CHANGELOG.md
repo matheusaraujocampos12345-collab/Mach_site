@@ -3,6 +3,14 @@
 Todas as mudanças relevantes do site ficam registradas aqui, da mais recente para a mais antiga.
 As versões seguem versionamento semântico. Enquanto o site não estiver no domínio oficial, elas começam em `0`.
 
+## [0.2.0] - 2026-11-19
+
+- Abertura refeita como cena em WebGL presa à tela: partículas formam uma parede de sites iguais e, com a rolagem, viram o logo da MACH.
+- Cartão 3D que inclina com o dedo ou o mouse.
+- Títulos que entram em foco com desfoque e feixes de luz atrás da chamada final.
+- Versão simples para quem usa movimento reduzido ou não tem WebGL.
+- Saíram a alça de comparação, o disco com mola e a comparação de peso.
+
 ## [0.1.0] - 2026-11-19
 
 - Abertura que mostra um site genérico de template e o varre para revelar o da MACH, com alça para arrastar e comparar os dois.

@@ -35,13 +35,13 @@ body{
   font-size:18px;line-height:1.55;-webkit-font-smoothing:antialiased;
 }
 main{overflow-x:clip}
-img{max-width:100%;display:block}
+img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--ink);outline-offset:4px;border-radius:6px}
 h1,h2,h3,p{margin:0}
-h2{font-size:clamp(34px,6.2vw,76px);font-weight:200;line-height:1.04;letter-spacing:-.03em}
+h2{font-size:clamp(36px,6.4vw,84px);font-weight:200;line-height:1.02;letter-spacing:-.035em}
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 30px;
+  display:inline-flex;align-items:center;justify-content:center;min-height:58px;padding:0 32px;
   border-radius:999px;background:var(--main);color:var(--main-ink);
   font-size:18px;font-weight:500;text-decoration:none;white-space:nowrap;
   transition:transform .18s ease, background-color .18s ease;
@@ -49,104 +49,70 @@ h2{font-size:clamp(34px,6.2vw,76px);font-weight:200;line-height:1.04;letter-spac
 .btn:hover{background:#FF7B33}
 .btn:active{transform:scale(.97)}
 .link{font-weight:400;text-underline-offset:5px;text-decoration-thickness:1px}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px 26px}
 
-/* ---------- Abertura ---------- */
-.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;--split:0}
-.hero-real{
-  position:relative;z-index:1;flex:1;display:flex;flex-direction:column;
-  padding:clamp(20px,3.4vw,40px) max(var(--pad),56px) clamp(30px,6vh,72px) var(--pad);
-}
-.bar{display:flex;justify-content:space-between;align-items:center;gap:16px}
-.bar img{height:clamp(34px,4.6vw,50px);width:auto}
-.hero-copy{margin-top:auto;padding-top:48px}
-.cota{display:flex;align-items:center;gap:14px;height:17px;max-width:780px;margin-bottom:clamp(22px,4vh,40px);color:var(--soft);font-size:14px;font-weight:400;border-left:1px solid var(--main);border-right:1px solid var(--main);white-space:nowrap}
-.cota::before,.cota::after{content:"";flex:1;height:1px;background:var(--main)}
-h1{font-size:clamp(46px,11.4vw,140px);font-weight:200;line-height:.99;letter-spacing:-.04em;max-width:10.6ch}
-h1 .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.1em 0 .16em;margin:-.1em 0 -.16em}
-h1 .w > span{display:inline-block;transform:translateY(112%);transition:transform .95s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--i)*70ms)}
-.hero.is-open h1 .w > span{transform:none}
-@media (min-width:860px){h1{max-width:16ch;font-size:clamp(60px,min(9.6vw,15.5vh),132px)}}
-.hero-sub{max-width:34ch;margin-top:clamp(20px,3.4vh,32px);color:var(--soft);font-size:clamp(17px,1.5vw,21px)}
-.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px 26px;margin-top:clamp(24px,4vh,40px)}
-.hero-sub,.hero-cta,.cota{opacity:0;transform:translateY(14px);transition:opacity .7s ease .55s, transform .9s cubic-bezier(.16,1,.3,1) .55s}
-.hero.is-open .hero-sub,.hero.is-open .hero-cta,.hero.is-open .cota{opacity:1;transform:none}
+/* Revelação com desfoque: cada palavra entra em foco quando o título aparece */
+.reveal .w{display:inline-block;opacity:0;filter:blur(14px);transform:translateY(.18em);transition:opacity .7s ease, filter .9s ease, transform .9s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--i)*80ms)}
+.reveal.in .w{opacity:1;filter:none;transform:none}
 
-/* A camada "template": o clichê inteiro, de propósito. */
-.hero-fake{
-  position:absolute;inset:0;z-index:2;pointer-events:none;
-  clip-path:inset(0 0 0 calc((100% - 22px) * var(--split) / 100));
-  background:linear-gradient(160deg,#7B5CF6 0%,#5B7CF6 100%);color:#fff;
-  font-family:Arial,Helvetica,sans-serif;font-weight:700;line-height:1.2;
-  display:flex;flex-direction:column;padding:clamp(18px,3vw,34px) var(--pad) 0;
+/* ---------- Abertura: a cena de partículas presa à tela ---------- */
+.hero{position:relative;height:330vh}
+.pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;isolation:isolate}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+.veil{position:absolute;inset:auto 0 0 0;height:62%;background:linear-gradient(to top, var(--ground) 16%, rgba(14,15,20,.82) 46%, transparent);pointer-events:none}
+.bar{position:absolute;z-index:3;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:clamp(18px,3vw,36px) var(--pad)}
+.bar img{height:clamp(32px,4.4vw,48px);width:auto}
+.stage{
+  position:absolute;z-index:2;left:var(--pad);right:var(--pad);bottom:clamp(34px,8vh,84px);
+  opacity:0;will-change:opacity,transform;pointer-events:none;
 }
-.fk-nav{display:flex;justify-content:space-between;align-items:center;font-size:20px}
-.fk-menu{display:flex;gap:10px}
-.fk-menu i{width:44px;height:8px;border-radius:4px;background:rgba(255,255,255,.45)}
-.fk-body{margin:auto 0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;padding:24px 0}
-.fk-pill{padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.2);font-size:14px}
-.fk-h{font-size:clamp(34px,6.4vw,74px);line-height:1.08;max-width:14ch}
-.fk-p{font-weight:400;font-size:clamp(15px,1.6vw,20px);max-width:38ch;opacity:.9}
-.fk-btn{padding:16px 34px;border-radius:999px;background:#fff;color:#4B38C9;font-size:18px}
-.fk-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:min(100%,560px);margin-top:8px}
-.fk-cards div{background:#fff;color:#2B2B45;border-radius:16px;padding:18px 6px 16px;font-size:15px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.fk-cards i{width:38px;height:38px;border-radius:50%;background:#7B5CF6}
-.fk-stat{font-size:clamp(16px,2vw,22px)}
-.fk-tag{position:absolute;left:var(--pad);bottom:22px;padding:8px 14px;border-radius:999px;background:#14151A;color:#fff;font-size:14px;font-weight:400}
+.stage.live{pointer-events:auto}
+.big{font-size:clamp(42px,10vw,124px);font-weight:200;line-height:.98;letter-spacing:-.04em;max-width:11ch}
+@media (min-width:860px){.big{max-width:15ch;font-size:clamp(60px,min(8.6vw,14.5vh),124px)}.big.final{max-width:21ch;font-size:clamp(46px,min(6.2vw,10.2vh),92px)}}
+.stage .sub{max-width:36ch;margin-top:clamp(16px,2.6vh,26px);color:var(--soft);font-size:clamp(17px,1.5vw,21px)}
+.stage .cta{margin-top:clamp(20px,3.4vh,34px)}
+.roll{display:flex;align-items:center;gap:12px;margin-top:clamp(18px,3vh,30px);color:var(--soft);font-size:15px;font-weight:400}
+.roll::before{content:"";width:1px;height:34px;background:var(--main);transform-origin:50% 0;animation:roll 1.8s cubic-bezier(.6,0,.3,1) infinite}
+@keyframes roll{0%{transform:scaleY(0)}55%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
 
-.hero-handle{
-  position:absolute;z-index:3;top:0;bottom:0;width:44px;margin-left:-22px;
-  left:calc((100% - 22px) * var(--split) / 100);
-  touch-action:pan-y;cursor:ew-resize;outline-offset:-6px;
-}
-.hero-handle::before{content:"";position:absolute;left:21px;top:0;bottom:0;width:2px;background:var(--main)}
-.knob{
-  position:absolute;left:0;top:clamp(84px,13vh,130px);width:44px;height:44px;border-radius:50%;
-  background:var(--ground);border:2px solid var(--main);display:grid;place-items:center;
-}
-.knob svg{width:20px;height:20px;stroke:var(--main);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.hint{
-  position:absolute;right:54px;top:calc(clamp(84px,13vh,130px) + 11px);white-space:nowrap;font-size:14px;font-weight:400;color:var(--soft);
-  opacity:0;transition:opacity .5s ease 1.4s;pointer-events:none;
-}
-.hero.is-open .hint{opacity:1}
-.hero.is-touched .hint{opacity:0;transition-delay:0s}
+/* Sem WebGL ou com movimento reduzido: a abertura vira uma tela comum */
+.plain .hero{height:auto}
+.plain .pin{position:relative;height:auto;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px var(--pad) clamp(34px,8vh,84px)}
+.plain #gl,.plain .veil,.plain #s1,.plain #s2{display:none}
+.plain .stage{position:static;opacity:1;pointer-events:auto}
+.plain .mark{display:block}
+.mark{display:none;width:min(100%,520px);margin-bottom:clamp(30px,6vh,60px)}
 
-/* ---------- O problema ---------- */
-.same{padding:clamp(72px,12vw,150px) 0 clamp(64px,10vw,130px)}
-.band{overflow:hidden;padding:6px 0}
-.band-track{display:flex;gap:18px;width:max-content;will-change:transform}
-.tile{width:168px;flex:none;padding:10px;border-radius:16px;background:var(--panel);border:1px solid var(--rule);display:grid;gap:8px}
-.tile b{display:block;height:64px;border-radius:10px;background:var(--t,#6D5BF5)}
-.tile u{display:block;height:20px;border-radius:999px;background:#E9E8F6;width:62%;justify-self:center}
-.tile s{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.tile s i{height:34px;border-radius:8px;background:#DCD9F4}
-.tile em{display:block;height:18px;border-radius:8px;background:#3A3470}
-.statement{
-  margin:clamp(44px,7vw,90px) var(--pad) 0;max-width:22ch;
-  font-size:clamp(30px,5.2vw,66px);font-weight:200;line-height:1.1;letter-spacing:-.025em;
-}
-.statement span{color:var(--faint);transition:color .35s ease}
-.statement span.on{color:var(--ink)}
-
-/* ---------- A diferença ---------- */
+/* ---------- As provas ---------- */
 .rows{padding:0 var(--pad)}
-.row{
-  display:grid;gap:clamp(28px,5vw,72px);align-items:center;
-  padding:clamp(52px,8vw,110px) 0;border-top:1px solid var(--rule);
-}
+.row{display:grid;gap:clamp(30px,5vw,80px);align-items:center;padding:clamp(60px,9vw,130px) 0;border-top:1px solid var(--rule)}
+.row:first-child{border-top:0}
 @media (min-width:860px){.row{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}}
-.row-text p{margin-top:18px;color:var(--soft);max-width:40ch}
-.demo{background:var(--panel);border:1px solid var(--rule);border-radius:24px;padding:clamp(18px,3vw,30px);min-width:0}
-.demo-note{margin-top:14px;font-size:15px;color:var(--soft);font-weight:400}
+.row-text p{margin-top:20px;color:var(--soft);max-width:40ch}
+.note{margin-top:16px;font-size:15px;color:var(--soft);font-weight:400}
 
-/* Demonstração 1: a página que se ajusta à medida */
+/* O cartão que inclina */
+.tilt{perspective:900px;padding:clamp(14px,4vw,40px) 0;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.card{
+  position:relative;width:min(100%,430px);aspect-ratio:1.6;margin:0 auto;border-radius:24px;
+  background:linear-gradient(135deg,#22232D 0%,#101117 60%);border:1px solid rgba(242,242,240,.16);
+  box-shadow:0 40px 80px rgba(0,0,0,.55);transform-style:preserve-3d;will-change:transform;
+  --gx:30%;--gy:20%;
+}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at var(--gx) var(--gy), rgba(246,104,28,.42), transparent 58%);opacity:.9}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at var(--gx) var(--gy), rgba(255,255,255,.2), transparent 32%);mix-blend-mode:screen}
+.card > *{position:absolute;transform:translateZ(38px)}
+.card img{left:7%;top:10%;width:34%}
+.card-name{left:7%;bottom:9%;font-size:clamp(24px,5.4vw,36px);font-weight:200;letter-spacing:-.03em;line-height:1}
+.card-tag{right:7%;bottom:10%;font-size:13px;font-weight:400;color:var(--soft);transform:translateZ(22px)}
+.card-chip{right:7%;top:11%;width:44px;height:32px;border-radius:8px;border:1.5px solid var(--main);transform:translateZ(54px)}
+
+/* A página que se ajusta à medida */
+.demo{background:var(--panel);border:1px solid var(--rule);border-radius:24px;padding:clamp(18px,3vw,30px);min-width:0}
 .fit-frame{container-type:inline-size;width:100%;min-width:190px;max-width:100%}
 .fit-cota{display:flex;align-items:center;gap:10px;height:13px;font-size:13px;font-weight:400;color:var(--soft);margin-bottom:14px;border-left:1px solid var(--main);border-right:1px solid var(--main);white-space:nowrap}
 .fit-cota::before,.fit-cota::after{content:"";flex:1;height:1px;background:var(--main)}
-.fit-page{
-  background:var(--ground);border:1px solid var(--rule);border-radius:16px;padding:16px;
-  display:grid;gap:14px;grid-template-columns:minmax(0,1fr);grid-template-areas:"t" "a" "x";min-height:250px;
-}
+.fit-page{background:var(--ground);border:1px solid var(--rule);border-radius:16px;padding:16px;display:grid;gap:14px;grid-template-columns:minmax(0,1fr);grid-template-areas:"t" "a" "x";min-height:250px}
 .fit-title{grid-area:t;font-size:30px;font-weight:200;line-height:1;letter-spacing:-.03em}
 .fit-arch{grid-area:a;height:110px;border-radius:110px 110px 12px 12px;background:var(--main)}
 .fit-text{grid-area:x;display:grid;gap:8px;align-content:start}
@@ -171,24 +137,6 @@ input[type=range]::-moz-range-track{height:2px;background:var(--rule)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-14px;border-radius:50%;background:var(--main);border:0}
 input[type=range]::-moz-range-thumb{width:30px;height:30px;border-radius:50%;background:var(--main);border:0}
 
-/* Demonstração 2: a mola */
-.pull{position:relative;height:clamp(240px,34vw,320px);border-radius:16px;background:var(--ground);border:1px solid var(--rule);overflow:hidden}
-.pull svg{position:absolute;inset:0;width:100%;height:100%}
-.pull line{stroke:var(--main);stroke-width:2;stroke-linecap:round}
-.pull circle{fill:none;stroke:var(--rule)}
-.pull-disc{
-  position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;
-  background:var(--main);border:0;padding:0;touch-action:none;cursor:grab;will-change:transform;
-}
-.pull-disc:active{cursor:grabbing}
-
-/* Demonstração 3: o peso */
-.weigh{display:grid;gap:22px}
-.weigh div{display:grid;gap:8px;font-size:15px;font-weight:400;color:var(--soft)}
-.weigh i{display:block;height:14px;border-radius:7px;background:var(--faint)}
-.weigh div:first-child i{background:var(--main);width:max(10px,__PCT__%)}
-.weigh strong{color:var(--ink);font-weight:500}
-
 /* ---------- Como funciona ---------- */
 .how{padding:clamp(64px,10vw,130px) var(--pad);border-top:1px solid var(--rule)}
 .steps{list-style:none;margin:clamp(36px,6vw,72px) 0 0;padding:0 0 0 clamp(34px,6vw,64px);position:relative;display:grid;gap:clamp(34px,5vw,56px);max-width:780px}
@@ -200,12 +148,22 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border-radius:50%;bac
 .steps h3 span{color:var(--main);font-weight:400;margin-right:.5em}
 .steps p{margin-top:8px;color:var(--soft);max-width:44ch}
 
-/* ---------- Prova e chamada ---------- */
-.proof{padding:clamp(64px,10vw,130px) var(--pad);border-top:1px solid var(--rule)}
-.proof p{margin-top:22px;max-width:46ch;color:var(--soft);font-size:clamp(18px,1.7vw,22px)}
-.call{padding:clamp(72px,12vw,160px) var(--pad);border-top:1px solid var(--rule)}
-.call h2{font-size:clamp(40px,8.6vw,112px);max-width:12ch}
-.call .hero-cta{opacity:1;transform:none;margin-top:clamp(28px,5vw,48px)}
+/* ---------- A chamada, sob feixes de luz ---------- */
+.call{position:relative;overflow:hidden;padding:clamp(110px,18vw,230px) var(--pad) clamp(80px,12vw,160px);border-top:1px solid var(--rule)}
+.rays{position:absolute;inset:0;pointer-events:none}
+.rays i{
+  position:absolute;top:-22%;height:120%;width:17%;
+  background:linear-gradient(to bottom, rgba(246,104,28,.5), rgba(246,104,28,.12) 55%, transparent 84%);
+  filter:blur(22px);transform-origin:50% 0;animation:ray 7s ease-in-out infinite alternate;
+}
+.rays i:nth-child(1){left:4%;transform:rotate(16deg);animation-delay:-1s}
+.rays i:nth-child(2){left:24%;transform:rotate(7deg);width:11%;animation-delay:-4s}
+.rays i:nth-child(3){left:44%;transform:rotate(-2deg);width:20%;animation-delay:-2s}
+.rays i:nth-child(4){left:66%;transform:rotate(-10deg);width:12%;animation-delay:-5.5s}
+.rays i:nth-child(5){left:82%;transform:rotate(-18deg);animation-delay:-3s}
+@keyframes ray{from{opacity:.35}to{opacity:1}}
+.call h2{position:relative;font-size:clamp(42px,9vw,120px);max-width:12ch}
+.call .cta{position:relative;margin-top:clamp(28px,5vw,52px)}
 
 /* ---------- Dúvidas ---------- */
 .faq{padding:clamp(56px,9vw,110px) var(--pad);border-top:1px solid var(--rule)}
@@ -220,67 +178,70 @@ details p{padding:0 0 24px;color:var(--soft);max-width:54ch}
 footer{padding:44px var(--pad) 120px;border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:20px 40px;justify-content:space-between;align-items:flex-end;color:var(--soft);font-size:15px;font-weight:400}
 footer img{width:170px;height:auto;margin-bottom:14px}
 
-.float{
-  position:fixed;z-index:20;right:16px;bottom:16px;padding-bottom:env(safe-area-inset-bottom,0px);
-  opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s ease, transform .4s cubic-bezier(.16,1,.3,1);
-}
+.float{position:fixed;z-index:20;right:16px;bottom:16px;padding-bottom:env(safe-area-inset-bottom,0px);opacity:0;transform:translateY(20px);pointer-events:none;transition:opacity .3s ease, transform .4s cubic-bezier(.16,1,.3,1)}
 .float.show{opacity:1;transform:none;pointer-events:auto}
 .float .btn{min-height:52px;padding:0 24px;font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{transition-duration:.01ms !important;transition-delay:0s !important;animation:none !important}
+  .reveal .w{opacity:1;filter:none;transform:none}
 }
 </style>
-<noscript><style>.hero{--split:100}h1 .w > span{transform:none}.hero-sub,.hero-cta,.cota{opacity:1;transform:none}</style></noscript>
+<noscript><style>.hero{height:auto}.pin{position:relative;height:auto;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px var(--pad) 60px}#gl,.veil,#s1,#s2{display:none}.stage{position:static;opacity:1;pointer-events:auto}.mark{display:block}.reveal .w{opacity:1;filter:none;transform:none}</style></noscript>
 </head>
 <body>
 <main>
 
 <section class="hero" id="inicio">
-  <div class="hero-real">
+  <div class="pin">
+    <canvas id="gl" aria-hidden="true"></canvas>
+    <div class="veil"></div>
     <div class="bar">
       <img src="__LOGO__" alt="MACH Estúdio" width="560" height="210">
       <a class="link" href="https://ig.me/m/mach.sites" target="_blank" rel="noopener">Chamar no direct</a>
     </div>
-    <div class="hero-copy">
-      <div class="cota"><span id="cota">feito sob medida para a sua tela</span></div>
-      <h1 id="titulo">Sites que ninguém confunde com template.</h1>
-      <p class="hero-sub">A MACH desenha e programa cada site do zero, com animação feita à mão, para a sua empresa não parecer mais uma.</p>
-      <div class="hero-cta">
+
+    <div class="stage" id="s1">
+      <p class="big">Todo site parece o mesmo.</p>
+      <p class="roll">role para desmontar</p>
+    </div>
+    <div class="stage" id="s2">
+      <p class="big">Até alguém desenhar o seu do zero.</p>
+    </div>
+    <div class="stage" id="s3">
+      <img class="mark" src="__LOGO__" alt="" width="560" height="210">
+      <h1 class="big final">Sites que ninguém confunde com template.</h1>
+      <p class="sub">A MACH desenha e programa cada site do zero, com animação feita à mão, para a sua empresa não parecer mais uma.</p>
+      <div class="cta">
         <a class="btn" href="https://ig.me/m/mach.sites" target="_blank" rel="noopener">Quero um site assim</a>
         <a class="link" href="#processo">Ver como funciona</a>
       </div>
     </div>
   </div>
-
-  <div class="hero-fake" aria-hidden="true">
-    <div class="fk-nav"><span>SuaLogo</span><span class="fk-menu"><i></i><i></i><i></i></span></div>
-    <div class="fk-body">
-      <span class="fk-pill">Novo: soluções com IA</span>
-      <div class="fk-h">Eleve seu negócio ao próximo nível</div>
-      <div class="fk-p">Soluções inovadoras e tecnologia de ponta para transformar a sua empresa.</div>
-      <span class="fk-btn">Comece agora</span>
-      <div class="fk-cards"><div><i></i>Rápido</div><div><i></i>Seguro</div><div><i></i>Escalável</div></div>
-      <div class="fk-stat">+10.000 clientes satisfeitos</div>
-    </div>
-    <span class="fk-tag">Site genérico nº 48</span>
-  </div>
-
-  <div class="hero-handle" id="alca" role="slider" tabindex="0" aria-label="Comparar com a versão template" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-    <span class="knob"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5 3 10l4 5M13 5l4 5-4 5"/></svg></span>
-  </div>
-  <span class="hint" aria-hidden="true">arraste e veja o template</span>
 </section>
 
-<section class="same" id="problema">
-  <div class="band" aria-hidden="true"><div class="band-track" id="faixa"></div></div>
-  <p class="statement" id="frase">Abra dez sites do seu ramo. Quantos você reconhece sem olhar o logo? Template resolve rápido. Só não resolve o principal: ser lembrado.</p>
-</section>
-
-<section class="rows" id="diferenca">
+<section class="rows" id="provas">
   <article class="row">
     <div class="row-text">
-      <h2>Feito sob medida.</h2>
+      <h2 class="reveal">Animação de verdade.</h2>
+      <p>Movimento que responde a quem usa, não enfeite rodando sozinho. A abertura deste site segue a sua rolagem, e o cartão ao lado segue o seu dedo.</p>
+    </div>
+    <div>
+      <div class="tilt" id="palco">
+        <div class="card" id="cartao">
+          <img src="__LOGO__" alt="" width="560" height="210">
+          <span class="card-chip"></span>
+          <span class="card-name">Sua empresa.</span>
+          <span class="card-tag">0 templates</span>
+        </div>
+      </div>
+      <p class="note">Passe o dedo ou o mouse sobre o cartão.</p>
+    </div>
+  </article>
+
+  <article class="row">
+    <div class="row-text">
+      <h2 class="reveal">Feito sob medida.</h2>
       <p>Nada de encaixar a sua empresa num modelo pronto. O desenho nasce do seu conteúdo e se rearranja para cada tela, do celular ao monitor.</p>
     </div>
     <div class="demo">
@@ -297,37 +258,10 @@ footer img{width:170px;height:auto;margin-bottom:14px}
       </label>
     </div>
   </article>
-
-  <article class="row">
-    <div class="row-text">
-      <h2>Animação de verdade.</h2>
-      <p>Movimento que responde a quem usa, não enfeite rodando sozinho. Cada um é programado à mão e testado no celular.</p>
-    </div>
-    <div class="demo">
-      <div class="pull" id="mola">
-        <svg aria-hidden="true"><circle id="anel1" r="54"/><circle id="anel2" r="96"/><line id="fio"/></svg>
-        <button class="pull-disc" id="disco" type="button" aria-label="Disco de demonstração: puxe e solte"></button>
-      </div>
-      <p class="demo-note">Puxe o disco e solte.</p>
-    </div>
-  </article>
-
-  <article class="row">
-    <div class="row-text">
-      <h2>Rápido para abrir.</h2>
-      <p>Site pesado perde o cliente antes de aparecer. Este aqui, com todas as animações, pesa menos do que uma única foto tirada no celular.</p>
-    </div>
-    <div class="demo">
-      <div class="weigh">
-        <div><span><strong>Este site, com animações e logo:</strong> __KB__ KB</span><i></i></div>
-        <div><span><strong>Uma foto de celular:</strong> cerca de 3.000 KB</span><i></i></div>
-      </div>
-    </div>
-  </article>
 </section>
 
 <section class="how" id="processo">
-  <h2>Como funciona.</h2>
+  <h2 class="reveal">Como funciona.</h2>
   <ol class="steps" id="passos">
     <li><h3><span>1</span>Conversa</h3><p>Você conta o que a empresa faz e o que o site precisa resolver.</p></li>
     <li><h3><span>2</span>Desenho</h3><p>A gente desenha o layout para o seu conteúdo. Você aprova antes de qualquer linha de código.</p></li>
@@ -336,21 +270,17 @@ footer img{width:170px;height:auto;margin-bottom:14px}
   </ol>
 </section>
 
-<section class="proof" id="prova">
-  <h2>A prova está na sua mão.</h2>
-  <p>Em vez de uma lista de logotipos, você acabou de usar o nosso trabalho: tudo o que se mexeu neste site foi desenhado e programado pela MACH. O seu recebe o mesmo cuidado.</p>
-</section>
-
 <section class="call" id="contato">
-  <h2>Quer um site que só a sua empresa tem?</h2>
-  <div class="hero-cta">
+  <div class="rays" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <h2 class="reveal">Quer um site que só a sua empresa tem?</h2>
+  <div class="cta">
     <a class="btn" href="https://ig.me/m/mach.sites" target="_blank" rel="noopener">Chamar no direct</a>
     <a class="link" href="https://www.instagram.com/mach.sites/" target="_blank" rel="noopener">@mach.sites no Instagram</a>
   </div>
 </section>
 
 <section class="faq" id="duvidas">
-  <h2>Dúvidas comuns.</h2>
+  <h2 class="reveal">Dúvidas comuns.</h2>
   <div class="faq-list">
     <details><summary>Quanto custa?</summary><p>Depende do tamanho do site e do nível de animação. Conte o que você precisa no direct e a gente responde com valor e prazo fechados, antes de qualquer compromisso.</p></details>
     <details><summary>Quanto tempo leva?</summary><p>O prazo é combinado antes de começar e entra no orçamento, junto com o valor.</p></details>
@@ -374,173 +304,265 @@ footer img{width:170px;height:auto;margin-bottom:14px}
 <script>
 (function () {
   'use strict';
+  var root = document.documentElement;
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var hero = document.getElementById('inicio');
-  var handle = document.getElementById('alca');
   var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
-  var ease = function (x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+  var smooth = function (a, b, x) { x = clamp((x - a) / (b - a), 0, 1); return x * x * (3 - 2 * x); };
+  var hero = document.getElementById('inicio');
+  var canvas = document.getElementById('gl');
+  var stages = [document.getElementById('s1'), document.getElementById('s2'), document.getElementById('s3')];
+  var barLogo = document.querySelector('.bar img');
 
-  /* ----- Abertura: o template cobre tudo e é varrido para a direita ----- */
-  var split = 0, run = 0;
-  function setSplit(v) {
-    split = clamp(v, 0, 100);
-    hero.style.setProperty('--split', split.toFixed(2));
-    handle.setAttribute('aria-valuenow', Math.round(split));
+  /* ================= A cena: partículas que saem de uma parede de sites iguais e formam o logo ================= */
+  var VERT = [
+    'attribute vec3 aA; attribute vec3 aB; attribute vec3 aCa; attribute vec3 aCb; attribute float aSeed;',
+    'uniform float uP, uT, uAspect, uSize; uniform vec2 uRot;',
+    'varying vec3 vC;',
+    'mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }',
+    'void main(){',
+    '  float e = clamp(uP * 1.55 - aSeed * 0.55, 0.0, 1.0);',
+    '  e = e * e * (3.0 - 2.0 * e);',
+    '  vec3 a = aA; a.z += sin(uT * 0.6 + a.x * 0.9 + a.y * 0.7) * 0.14;',
+    '  vec3 b = aB; b.z += sin(uT * 0.9 + aSeed * 40.0) * 0.03;',
+    '  vec3 p = mix(a, b, e);',
+    '  float k = sin(3.14159 * e);',
+    '  p.xy = rot(k * (1.2 + aSeed * 1.6)) * p.xy;',
+    '  p += k * vec3(sin(aSeed * 91.7 + uT * 0.7), cos(aSeed * 53.3 + uT * 0.6), sin(aSeed * 27.1 + uT * 0.5)) * 1.25;',
+    '  p.xz = rot(uRot.x) * p.xz; p.yz = rot(uRot.y) * p.yz;',
+    '  float z = 9.0 - p.z;',
+    '  gl_Position = vec4(p.x * 2.4142 / uAspect, p.y * 2.4142, 0.0, z);',
+    '  gl_PointSize = uSize * (9.0 / z) * (0.75 + 0.5 * fract(aSeed * 7.31)) * (1.0 + k * 0.6) * mix(1.7, 1.0, e);',
+    '  vC = mix(aCa, aCb, e);',
+    '}'
+  ].join('\n');
+  var FRAG = [
+    'precision mediump float; varying vec3 vC;',
+    'void main(){',
+    '  vec2 d = gl_PointCoord - 0.5; float r = dot(d, d);',
+    '  if (r > 0.25) discard;',
+    '  float a = smoothstep(0.25, 0.05, r);',
+    '  gl_FragColor = vec4(vC * a, a);',
+    '}'
+  ].join('\n');
+
+  var gl = null, prog = null, buf = null, N = 0, data = null, U = {}, logoPts = null, ready = false;
+  var VIEW_H = 2 * 9 * Math.tan(Math.PI / 8); /* altura visível no plano z = 0 */
+
+  function shader(type, src) {
+    var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
   }
-  function glide(to, ms) {
-    var from = split, t0 = performance.now(), id = ++run;
-    (function step(now) {
-      if (id !== run) return;
-      var k = clamp((now - t0) / ms, 0, 1);
-      setSplit(from + (to - from) * ease(k));
-      if (k < 1) requestAnimationFrame(step);
-    })(t0);
-  }
-  var title = document.getElementById('titulo');
-  title.innerHTML = title.textContent.split(' ').map(function (w, i) {
-    return '<span class="w"><span style="--i:' + i + '">' + w + '</span></span>';
-  }).join(' ');
-  if (calm) { setSplit(100); hero.classList.add('is-open'); }
-  else {
-    setSplit(0);
-    setTimeout(function () { glide(100, 1250); }, 750);
-    setTimeout(function () { hero.classList.add('is-open'); }, 1050);
+  function startGL() {
+    gl = canvas.getContext('webgl', { alpha: true, antialias: false, premultipliedAlpha: true, powerPreference: 'high-performance' });
+    if (!gl) return false;
+    prog = gl.createProgram();
+    gl.attachShader(prog, shader(gl.VERTEX_SHADER, VERT)); gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, FRAG));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+    gl.useProgram(prog);
+    ['uP', 'uT', 'uAspect', 'uSize', 'uRot'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+    buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    var stride = 13 * 4, off = 0;
+    [['aA', 3], ['aB', 3], ['aCa', 3], ['aCb', 3], ['aSeed', 1]].forEach(function (a) {
+      var loc = gl.getAttribLocation(prog, a[0]);
+      gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, a[1], gl.FLOAT, false, stride, off); off += a[1] * 4;
+    });
+    gl.disable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    gl.clearColor(0, 0, 0, 0);
+    return true;
   }
 
-  /* ----- A alça: arrastar, tocar ou usar as setas ----- */
-  var drag = null;
-  function fromPointer(e) {
-    var r = hero.getBoundingClientRect();
-    return (e.clientX - r.left) / (r.width - 22) * 100;
-  }
-  handle.addEventListener('pointerdown', function (e) {
-    run++; drag = { x: e.clientX, moved: false };
-    handle.setPointerCapture(e.pointerId);
-    hero.classList.add('is-touched');
-  });
-  handle.addEventListener('pointermove', function (e) {
-    if (!drag) return;
-    if (Math.abs(e.clientX - drag.x) > 5) drag.moved = true;
-    if (drag.moved) setSplit(fromPointer(e));
-  });
-  function drop() {
-    if (!drag) return;
-    if (!drag.moved) glide(split > 60 ? 30 : 100, 700);
-    else if (split > 88) glide(100, 350);
-    drag = null;
-  }
-  handle.addEventListener('pointerup', drop);
-  handle.addEventListener('pointercancel', drop);
-  handle.addEventListener('keydown', function (e) {
-    var d = { ArrowLeft: -6, ArrowRight: 6 }[e.key];
-    if (e.key === 'Home') { run++; setSplit(0); }
-    else if (e.key === 'End') { run++; setSplit(100); }
-    else if (d) { run++; setSplit(split + d); }
-    else return;
-    e.preventDefault(); hero.classList.add('is-touched');
-  });
-
-  /* ----- A cota do topo mostra a medida real da tela ----- */
-  var cota = document.getElementById('cota');
-  function measure() { var w = window.innerWidth; cota.textContent = (w < 480 ? 'feito para a sua tela de ' : 'feito sob medida para a sua tela de ') + w + ' px'; }
-  measure();
-
-  /* ----- A faixa de sites iguais e a frase que se acende com a rolagem ----- */
-  var band = document.getElementById('faixa');
-  var tones = ['#6D5BF5', '#7C6CF7', '#5A4BD6'];
-  var tiles = '';
-  for (var i = 0; i < 14; i++) tiles += '<div class="tile" style="--t:' + tones[i % 3] + '"><b></b><u></u><s><i></i><i></i><i></i></s><em></em></div>';
-  band.innerHTML = tiles;
-  var phrase = document.getElementById('frase');
-  phrase.innerHTML = phrase.textContent.split(' ').map(function (w) { return '<span>' + w + '</span>'; }).join(' ');
-  var words = phrase.querySelectorAll('span'), lit = 0;
-  var steps = document.getElementById('passos');
-
-  var ticking = false;
-  function onScroll() {
-    ticking = false;
-    var vh = window.innerHeight;
-    var b = band.parentNode.getBoundingClientRect();
-    if (b.bottom > 0 && b.top < vh && !calm) band.style.transform = 'translate3d(' + (-(vh - b.top) * 0.22).toFixed(1) + 'px,0,0)';
-    var p = phrase.getBoundingClientRect();
-    var k = clamp((vh * 0.88 - p.top) / (p.height + vh * 0.38), 0, 1);
-    var n = Math.round(k * words.length);
-    if (n !== lit) {
-      for (var j = Math.min(n, lit); j < Math.max(n, lit); j++) words[j].classList.toggle('on', j < n);
-      lit = n;
+  /* Os pontos do logo vêm do próprio arquivo de imagem da MACH. */
+  function sampleLogo(img) {
+    var c = document.createElement('canvas'); c.width = img.naturalWidth; c.height = img.naturalHeight;
+    var x = c.getContext('2d'); x.drawImage(img, 0, 0);
+    var px = x.getImageData(0, 0, c.width, c.height).data, out = [];
+    for (var j = 0; j < c.height; j++) for (var i = 0; i < c.width; i++) {
+      var o = (j * c.width + i) * 4;
+      if (px[o + 3] > 110) out.push(i, j, px[o] / 255, px[o + 1] / 255, px[o + 2] / 255);
     }
-    var s = steps.getBoundingClientRect();
-    steps.style.setProperty('--fill', clamp((vh * 0.72 - s.top) / s.height, 0, 1).toFixed(3));
+    return { w: c.width, h: c.height, pts: out };
   }
-  function requestTick() { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }
-  window.addEventListener('scroll', requestTick, { passive: true });
-  window.addEventListener('resize', function () { measure(); requestTick(); sizeSpring(); showWidth(); });
-  onScroll();
 
-  /* ----- Demonstração 1: a largura muda e o desenho se rearranja ----- */
-  var frame = document.getElementById('quadro');
-  var range = document.getElementById('largura');
-  var label = document.getElementById('medida');
-  function showWidth() { label.textContent = Math.round(frame.getBoundingClientRect().width) + ' px'; }
-  range.addEventListener('input', function () {
-    frame.style.width = 'calc(190px + (100% - 190px) * ' + (range.value / 100) + ')';
-    showWidth();
+  /* Uma "página de template": moldura, bloco de destaque, botão, três cartões e uma faixa. */
+  var BLOCKS = [
+    { w: .34, x0: -.42, x1: .42, y0: .22, y1: .64, c: [.43, .36, .96] },
+    { w: .08, x0: -.20, x1: .20, y0: .06, y1: .15, c: [.93, .93, .92] },
+    { w: .10, x0: -.42, x1: -.16, y0: -.34, y1: -.04, c: [.76, .74, .95] },
+    { w: .10, x0: -.13, x1: .13, y0: -.34, y1: -.04, c: [.76, .74, .95] },
+    { w: .10, x0: .16, x1: .42, y0: -.34, y1: -.04, c: [.76, .74, .95] },
+    { w: .16, x0: -.42, x1: .42, y0: -.62, y1: -.46, c: [.30, .26, .68] }
+  ];
+  function build() {
+    var aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight);
+    var W = VIEW_H * aspect;
+    var small = canvas.clientWidth < 700;
+    N = small ? 20000 : 34000;
+    data = new Float32Array(N * 13);
+    var cols = aspect < .8 ? 3 : (aspect < 1.4 ? 4 : 6);
+    var pw = W / (cols - .15), ph = pw * 1.5;
+    var rows = Math.ceil(VIEW_H / ph) + 1, pages = cols * rows;
+    var tall = aspect < 1;
+    var lw = tall ? W * .86 : Math.min(W * .5, 6.2), ls = lw / logoPts.w, ly = VIEW_H * (tall ? .15 : .23), np = logoPts.pts.length / 5;
+    for (var i = 0; i < N; i++) {
+      var o = i * 13, pg = i % pages, col = pg % cols, row = (pg / cols) | 0;
+      var cx = (col - (cols - 1) / 2) * pw, cy = ((rows - 1) / 2 - row) * ph;
+      var depth = -.9 + .8 * ((pg * 0.6180339) % 1);
+      var r = Math.random(), x, y, cA;
+      if (r < .12) { /* moldura */
+        var t = Math.random(), side = (Math.random() * 4) | 0;
+        x = side === 0 ? -.47 : side === 1 ? .47 : -.47 + .94 * t;
+        y = side === 2 ? -.7 : side === 3 ? .7 : -.7 + 1.4 * t;
+        cA = [.55, .55, .66];
+      } else {
+        var acc = .12, bk = BLOCKS[0];
+        for (var b = 0; b < BLOCKS.length; b++) { acc += BLOCKS[b].w; if (r < acc) { bk = BLOCKS[b]; break; } }
+        x = bk.x0 + Math.random() * (bk.x1 - bk.x0); y = bk.y0 + Math.random() * (bk.y1 - bk.y0); cA = bk.c;
+      }
+      var tone = .86 + .14 * ((pg * 0.3819) % 1);
+      data[o] = cx + x * pw * .96; data[o + 1] = cy + y * ph / 1.5 * .96; data[o + 2] = depth;
+      var q = ((Math.random() * np) | 0) * 5;
+      data[o + 3] = (logoPts.pts[q] + Math.random() - logoPts.w / 2) * ls;
+      data[o + 4] = -(logoPts.pts[q + 1] + Math.random() - logoPts.h / 2) * ls + ly;
+      data[o + 5] = (Math.random() - .5) * .08;
+      data[o + 6] = cA[0] * tone; data[o + 7] = cA[1] * tone; data[o + 8] = cA[2] * tone;
+      data[o + 9] = logoPts.pts[q + 2]; data[o + 10] = logoPts.pts[q + 3]; data[o + 11] = logoPts.pts[q + 4];
+      data[o + 12] = Math.random();
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+  }
+  function fit() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
+    gl.uniform1f(U.uAspect, w / Math.max(1, h));
+    gl.uniform1f(U.uSize, Math.max(2, canvas.clientHeight / 360) * dpr);
+  }
+
+  /* A rolagem manda: o progresso é suavizado a cada quadro para a transformação nunca dar tranco. */
+  var want = 0, cur = 0, seen = true, looping = false, rx = 0, ry = 0, wantRx = 0, wantRy = 0;
+  function readScroll() {
+    var r = hero.getBoundingClientRect(), span = hero.offsetHeight - window.innerHeight;
+    want = span > 0 ? clamp(-r.top / span, 0, 1) : 1;
+  }
+  function paintStages(p) {
+    var o = [1 - smooth(.08, .2, p), smooth(.26, .36, p) * (1 - smooth(.52, .62, p)), smooth(.74, .88, p)];
+    for (var i = 0; i < 3; i++) {
+      stages[i].style.opacity = o[i].toFixed(3);
+      stages[i].style.transform = 'translate3d(0,' + ((1 - o[i]) * (i === 0 ? -18 : 22)).toFixed(1) + 'px,0)';
+      stages[i].classList.toggle('live', o[i] > .6);
+    }
+    barLogo.style.opacity = (1 - smooth(.46, .62, p)).toFixed(3);
+  }
+  function frame(now) {
+    if (!seen) { looping = false; return; }
+    cur += (want - cur) * .09;
+    if (Math.abs(want - cur) < .0004) cur = want;
+    rx += (wantRx - rx) * .05; ry += (wantRy - ry) * .05;
+    var t = now / 1000;
+    gl.uniform1f(U.uP, smooth(.1, .76, cur));
+    gl.uniform1f(U.uT, t);
+    gl.uniform2f(U.uRot, rx + Math.sin(t * .31) * .1, ry + Math.cos(t * .27) * .05);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.POINTS, 0, N);
+    paintStages(cur);
+    requestAnimationFrame(frame);
+  }
+  function wake() { if (ready && !looping && seen) { looping = true; requestAnimationFrame(frame); } }
+
+  function goPlain() { root.classList.add('plain'); barLogo.style.opacity = 0; stages.forEach(function (el) { el.removeAttribute('style'); el.classList.add('live'); }); }
+  if (calm) goPlain();
+  else {
+    try {
+      if (!startGL()) goPlain();
+      else {
+        paintStages(0);
+        var img = new Image();
+        img.onload = function () {
+          try {
+            logoPts = sampleLogo(img); fit(); build(); ready = true; readScroll(); cur = want; wake();
+          } catch (err) { goPlain(); }
+        };
+        img.onerror = goPlain;
+        img.src = document.querySelector('.bar img').src;
+        window.addEventListener('scroll', function () { readScroll(); wake(); }, { passive: true });
+        window.addEventListener('pointermove', function (e) {
+          if (e.pointerType === 'touch') return;
+          wantRx = (e.clientX / window.innerWidth - .5) * .5; wantRy = (e.clientY / window.innerHeight - .5) * .3;
+        }, { passive: true });
+        var again;
+        window.addEventListener('resize', function () {
+          clearTimeout(again);
+          again = setTimeout(function () { if (ready) { fit(); build(); readScroll(); } }, 180);
+        });
+        if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { seen = en[0].isIntersecting; wake(); }).observe(hero);
+        canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); goPlain(); });
+      }
+    } catch (err) { goPlain(); }
+  }
+
+  /* ================= Títulos: cada palavra entra em foco quando aparece ================= */
+  var titles = document.querySelectorAll('.reveal');
+  Array.prototype.forEach.call(titles, function (el) {
+    el.innerHTML = el.textContent.split(' ').map(function (w, i) { return '<span class="w" style="--i:' + i + '">' + w + '</span>'; }).join(' ');
   });
+  if ('IntersectionObserver' in window && !calm) {
+    var io = new IntersectionObserver(function (en) {
+      en.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } });
+    }, { threshold: .4 });
+    Array.prototype.forEach.call(titles, function (el) { io.observe(el); });
+  } else Array.prototype.forEach.call(titles, function (el) { el.classList.add('in'); });
+
+  /* ================= O cartão que inclina ================= */
+  var deck = document.getElementById('palco'), card = document.getElementById('cartao');
+  var tx = 0, ty = 0, gx = 30, gy = 20, aimX = 0, aimY = 0, aimGx = 30, aimGy = 20, touching = false, cardSeen = false, cardLoop = false;
+  function aim(e) {
+    var r = card.getBoundingClientRect();
+    var u = clamp((e.clientX - r.left) / r.width, -.2, 1.2), v = clamp((e.clientY - r.top) / r.height, -.2, 1.2);
+    aimY = (u - .5) * 30; aimX = (.5 - v) * 24; aimGx = u * 100; aimGy = v * 100; touching = true;
+  }
+  deck.addEventListener('pointermove', aim);
+  deck.addEventListener('pointerdown', aim);
+  ['pointerleave', 'pointerup', 'pointercancel'].forEach(function (n) { deck.addEventListener(n, function () { touching = false; }); });
+  function cardFrame(now) {
+    if (!cardSeen) { cardLoop = false; return; }
+    var t = now / 1000;
+    if (!touching && !calm) { aimX = Math.sin(t * .9) * 7; aimY = Math.cos(t * .7) * 12; aimGx = 50 + Math.cos(t * .7) * 34; aimGy = 40 + Math.sin(t * .9) * 26; }
+    tx += (aimX - tx) * .1; ty += (aimY - ty) * .1; gx += (aimGx - gx) * .1; gy += (aimGy - gy) * .1;
+    card.style.transform = 'rotateX(' + tx.toFixed(2) + 'deg) rotateY(' + ty.toFixed(2) + 'deg)';
+    card.style.setProperty('--gx', gx.toFixed(1) + '%'); card.style.setProperty('--gy', gy.toFixed(1) + '%');
+    requestAnimationFrame(cardFrame);
+  }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (en) {
+    cardSeen = en[0].isIntersecting;
+    if (cardSeen && !cardLoop) { cardLoop = true; requestAnimationFrame(cardFrame); }
+  }).observe(deck);
+
+  /* ================= A largura muda e o desenho se rearranja ================= */
+  var box = document.getElementById('quadro'), range = document.getElementById('largura'), label = document.getElementById('medida');
+  function showWidth() { label.textContent = Math.round(box.getBoundingClientRect().width) + ' px'; }
+  range.addEventListener('input', function () { box.style.width = 'calc(190px + (100% - 190px) * ' + (range.value / 100) + ')'; showWidth(); });
+  window.addEventListener('resize', showWidth);
   showWidth();
 
-  /* ----- Demonstração 2: a mola ----- */
-  var box = document.getElementById('mola'), disc = document.getElementById('disco');
-  var wire = document.getElementById('fio'), ring1 = document.getElementById('anel1'), ring2 = document.getElementById('anel2');
-  var cx = 0, cy = 0, px = 0, py = 0, vx = 0, vy = 0, held = null, live = false, last = 0;
-  function sizeSpring() {
-    cx = box.clientWidth / 2; cy = box.clientHeight / 2;
-    [ring1, ring2].forEach(function (c) { c.setAttribute('cx', cx); c.setAttribute('cy', cy); });
-    wire.setAttribute('x1', cx); wire.setAttribute('y1', cy);
-    paint();
+  /* ================= A linha do processo se enche com a rolagem ================= */
+  var steps = document.getElementById('passos'), tick = false;
+  function fill() {
+    tick = false;
+    var s = steps.getBoundingClientRect();
+    steps.style.setProperty('--fill', clamp((window.innerHeight * .72 - s.top) / s.height, 0, 1).toFixed(3));
   }
-  function paint() {
-    disc.style.transform = 'translate3d(' + px.toFixed(2) + 'px,' + py.toFixed(2) + 'px,0)';
-    wire.setAttribute('x2', (cx + px).toFixed(2)); wire.setAttribute('y2', (cy + py).toFixed(2));
-  }
-  function spring(now) {
-    var dt = Math.min(0.032, (now - last) / 1000); last = now;
-    if (!held) {
-      vx += (-170 * px - 11 * vx) * dt; vy += (-170 * py - 11 * vy) * dt;
-      px += vx * dt; py += vy * dt;
-      if (Math.abs(px) + Math.abs(py) < 0.3 && Math.abs(vx) + Math.abs(vy) < 4) { px = py = vx = vy = 0; live = false; }
-    }
-    paint();
-    if (live) requestAnimationFrame(spring);
-  }
-  function wake() { if (!live) { live = true; last = performance.now(); requestAnimationFrame(spring); } }
-  disc.addEventListener('pointerdown', function (e) {
-    held = { x: e.clientX - px, y: e.clientY - py, lx: px, ly: py, lt: performance.now() };
-    disc.setPointerCapture(e.pointerId); wake();
-  });
-  disc.addEventListener('pointermove', function (e) {
-    if (!held) return;
-    var nx = clamp(e.clientX - held.x, -cx + 38, cx - 38), ny = clamp(e.clientY - held.y, -cy + 38, cy - 38);
-    var now = performance.now(), dt = Math.max(0.008, (now - held.lt) / 1000);
-    vx = (nx - px) / dt; vy = (ny - py) / dt; held.lt = now;
-    px = nx; py = ny;
-  });
-  function release() { if (held) { vx = clamp(vx, -2400, 2400); vy = clamp(vy, -2400, 2400); held = null; wake(); } }
-  disc.addEventListener('pointerup', release);
-  disc.addEventListener('pointercancel', release);
-  disc.addEventListener('keydown', function (e) {
-    var d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
-    if (!d) return;
-    e.preventDefault(); vx += d[0] * 900; vy += d[1] * 900; wake();
-  });
-  sizeSpring();
+  window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(fill); } }, { passive: true });
+  fill();
 
-  /* ----- O botão flutuante aparece depois da abertura e some na chamada final ----- */
+  /* ================= O botão flutuante aparece depois da abertura e some na chamada final ================= */
   var float = document.getElementById('flutua');
   if ('IntersectionObserver' in window) {
     var past = false, atCall = false;
     var sync = function () { float.classList.toggle('show', past && !atCall); };
     new IntersectionObserver(function (en) { past = !en[0].isIntersecting; sync(); }).observe(hero);
-    new IntersectionObserver(function (en) { atCall = en[0].isIntersecting; sync(); }, { threshold: 0.3 }).observe(document.getElementById('contato'));
+    new IntersectionObserver(function (en) { atCall = en[0].isIntersecting; sync(); }, { threshold: .3 }).observe(document.getElementById('contato'));
   }
 })();
 </script>
